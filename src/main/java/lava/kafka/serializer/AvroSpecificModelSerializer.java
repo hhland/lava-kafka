@@ -25,24 +25,15 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
 
-public abstract  class  AvroSpecificSerializer <M extends IndexedRecord> implements Serializer<M>,Deserializer<M> {
+public abstract  class  AvroSpecificModelSerializer <M extends IndexedRecord> extends ModelSerializer<M> 
+implements Serializer<M>,Deserializer<M> {
 
 	   final static Schema.Parser parser = new Schema.Parser();
 
 	   final static Map<Class, Schema> schemaMap=new HashMap<>();
 	   
-	   protected abstract Class<M> modelClass();
-	
-	   protected M newModel() throws NullPointerException{
-		   M ret=null;
-		   try {
-			ret=modelClass().newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			throw new NullPointerException(e.getMessage());
-		}
-		  return ret;
-	   }
+	   
+	   
 	    
 	    @Override
 	    public  byte[]  serialize(String topic, M data) {

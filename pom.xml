@@ -19,11 +19,10 @@
     <version>${kafka.version}</version>
 </dependency>
 
-<!-- https://mvnrepository.com/artifact/com.github.os72/protoc-jar -->
 <dependency>
-    <groupId>com.github.os72</groupId>
-    <artifactId>protoc-jar</artifactId>
-    <version>3.7.0</version>
+  <groupId>com.google.protobuf</groupId>
+  <artifactId>protobuf-java</artifactId>
+  <version>3.6.1</version>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.apache.avro/avro -->

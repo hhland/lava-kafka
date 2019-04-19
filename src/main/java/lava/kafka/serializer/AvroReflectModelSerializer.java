@@ -24,13 +24,14 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
 
-public abstract  class  AvroReflectSerializer <M> implements Serializer<M>,Deserializer<M> {
+public abstract  class  AvroReflectModelSerializer <M> extends ModelSerializer<M> 
+implements Serializer<M>,Deserializer<M> {
 
 	   final static Schema.Parser parser = new Schema.Parser();
 
 	   final static Map<Class, Schema> schemaMap=new HashMap<>();
 	   
-	   protected abstract Class<M> modelClass();
+	   
 	
 	   protected M newModel() throws NullPointerException{
 		   M ret=null;
