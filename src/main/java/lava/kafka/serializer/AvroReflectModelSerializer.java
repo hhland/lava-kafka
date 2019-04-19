@@ -33,16 +33,7 @@ implements Serializer<M>,Deserializer<M> {
 	   
 	   
 	
-	   protected M newModel() throws NullPointerException{
-		   M ret=null;
-		   try {
-			ret=modelClass().newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			throw new NullPointerException(e.getMessage());
-		}
-		  return ret;
-	   }
+	   
 	    
 	    @Override
 	    public  byte[]  serialize(String topic, M data) {
