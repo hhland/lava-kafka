@@ -11,11 +11,28 @@
   
   <dependencies>
   
+
+  
   <dependency>
     <groupId>org.apache.kafka</groupId>
     <artifactId>kafka-clients</artifactId>
     <version>${kafka.version}</version>
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/com.github.os72/protoc-jar -->
+<dependency>
+    <groupId>com.github.os72</groupId>
+    <artifactId>protoc-jar</artifactId>
+    <version>3.7.0</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.apache.avro/avro -->
+<dependency>
+    <groupId>org.apache.avro</groupId>
+    <artifactId>avro</artifactId>
+    <version>1.8.2</version>
+</dependency>
+
   
   </dependencies>
   
