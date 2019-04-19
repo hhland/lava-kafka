@@ -2,10 +2,10 @@ package lava.kafka.test;
 
 import java.util.Map;
 
-import lava.kafka.serializer.AvroModelSerializer;
+import lava.kafka.serializer.AvroReflectSerializer;
 
 
-public class StockAvroSerializer extends AvroModelSerializer<Stock>{
+public class StockAvroSerializer extends AvroReflectSerializer<Stock>{
 
 	@Override
 	public void configure(Map<String, ?> configs, boolean isKey) {

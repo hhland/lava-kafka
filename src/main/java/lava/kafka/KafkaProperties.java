@@ -12,7 +12,8 @@ public enum KafkaProperties  {
 	
 
 	protected String propName() {
-		return this.name().replaceAll("_", ".");
+		String ret= this.name().replaceAll("_", ".");
+		return ret;
 	}
 	
 	public void put(Properties props,Object val) {

@@ -1,12 +1,14 @@
 package lava.kafka.test;
 
+
+
 public class Stock {
 
 	String stockCode, stockName;
 	long radeTime;
 	
 	
-	float PreClosePrice;
+	float preClosePrice;
 
 
 	public String getStockCode() {
@@ -40,13 +42,16 @@ public class Stock {
 
 
 	public float getPreClosePrice() {
-		return PreClosePrice;
+		return preClosePrice;
 	}
 
 
 	public void setPreClosePrice(float preClosePrice) {
-		PreClosePrice = preClosePrice;
+		this.preClosePrice = preClosePrice;
 	}
+
+
+	
 	
 	
 

@@ -17,14 +17,14 @@ public class AvroKafkaProducer {
 	
 public static void main(String[] args) throws Exception {
         
-        Stock[] stocks = new Stock[100];
-        for(int i = 0; i < 100; i++) {
+        Stock[] stocks = new Stock[1000];
+        for(int i = 0; i < stocks.length; i++) {
             stocks[i] = new Stock();
             stocks[i].setStockCode(String.valueOf(i));
             stocks[i].setStockName("stock" + i);
           
             stocks[i].setPreClosePrice(100.0F);
-            
+            stocks[i].setRadeTime(68768);
         }
         
         Properties props = new Properties();

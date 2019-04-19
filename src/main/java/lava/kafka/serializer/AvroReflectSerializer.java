@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.avro.Schema;
@@ -14,13 +16,15 @@ import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.EncoderFactory;
+import org.apache.avro.reflect.ReflectDatumReader;
+import org.apache.avro.reflect.ReflectDatumWriter;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
 
-public abstract  class  AvroModelSerializer <M> implements Serializer<M>,Deserializer<M> {
+public abstract  class  AvroReflectSerializer <M> implements Serializer<M>,Deserializer<M> {
 
 	   final static Schema.Parser parser = new Schema.Parser();
 
@@ -42,7 +46,7 @@ public abstract  class  AvroModelSerializer <M> implements Serializer<M>,Deseria
 	    @Override
 	    public  byte[]  serialize(String topic, M data) {
 	        
-	        DatumWriter<M> writer = new SpecificDatumWriter<>(getSchema());
+	        DatumWriter<M> writer = new ReflectDatumWriter<>(getSchema());
 	        ByteArrayOutputStream out = new ByteArrayOutputStream();
 	        BinaryEncoder encoder = EncoderFactory.get().directBinaryEncoder(out, null);
 	        try {
@@ -58,7 +62,7 @@ public abstract  class  AvroModelSerializer <M> implements Serializer<M>,Deseria
 	        
 	        M m = newModel();
 	        ByteArrayInputStream in = new ByteArrayInputStream(data);
-	        DatumReader<M> userDatumReader = new SpecificDatumReader<>(getSchema());
+	        DatumReader<M> userDatumReader = new ReflectDatumReader<>(getSchema());
 	        BinaryDecoder decoder = DecoderFactory.get().directBinaryDecoder(in, null);
 	        try {
 	            m = userDatumReader.read(null, decoder);
@@ -83,7 +87,7 @@ public abstract  class  AvroModelSerializer <M> implements Serializer<M>,Deseria
 		
 		
 		
-		protected static Schema createSchema(Class cls) {
+		public static Schema createSchema(Class cls) {
             StringBuffer sbf=new StringBuffer();
 			sbf
 			.append("{")
@@ -92,26 +96,35 @@ public abstract  class  AvroModelSerializer <M> implements Serializer<M>,Deseria
 			.append("\n\t \"name\": \""+cls.getSimpleName()+"\", ")
 			.append("\n\t \"fields\": [ ")
 			;
-			Method[] mths=cls.getDeclaredMethods();
-			for(int i=0;i<mths.length;i++) {
-				Method mth=mths[i];
-				if(!mth.getName().startsWith("set"))continue;
+			List<Method> mths=new ArrayList<Method>();
+			for(Method mth:cls.getMethods()) {
+				if(mth.getName().startsWith("set")) {
+					mths.add(mth);
+				}
+			}
+			int mthsSize=mths.size();
+			for(int i=0;i<mthsSize;i++) {
+				Method mth=mths.get(i);
+				
 				String fieldName=mth.getName().substring("set".length())
 						,fieldType=mth.getParameterTypes()[0].getSimpleName()
 						;
 				fieldName=fieldName.substring(0,1).toLowerCase()+fieldName.substring(1);
 				fieldType=fieldType.toLowerCase();
 				sbf.append("\n\t\t {\"name\": \""+fieldName+"\", \"type\": \""+fieldType+"\"}");
-				if(i<mths.length-1) {
+				if(i!=mthsSize-1) {
 					sbf.append(",");
 				}
 			}
 			
 			sbf.append("\n\t ] ")
-			.append("}")
+			.append("\n}")
 			;
+			System.out.println(sbf.toString());
+			Schema ret=null;
+		
+			  ret =parser.parse(sbf.toString());
 			
-			Schema ret=parser.parse(sbf.toString());
 			return ret;
 		}
 		

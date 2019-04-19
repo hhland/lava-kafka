@@ -16,14 +16,14 @@ public class SendClient {
 		// TODO Auto-generated method stub
 		Properties props=new Properties();
 		KafkaProperties.bootstrap_servers.put(props, "localhost:9092"); 
-		KafkaProperties.acks.put(props, "all");
+		KafkaProperties.acks.put(props, "1");
 		KafkaProperties.key_serializer.put(props, StringSerializer.class.getName());
 		KafkaProperties.value_serializer.put(props, StringSerializer.class.getName());
 		
 		 
         try(KafkaProducer<String, String> producer=new KafkaProducer<>(props)){
-          for(int i=0;i<1000;i++) {
-            ProducerRecord<String, String> record=new ProducerRecord<String, String>("hhlin77","uusf"+i, "vadfs"+i);
+          for(int i=0;i<100;i++) {
+            ProducerRecord<String, String> record=new ProducerRecord<String, String>("hhl","uusf"+i, "vadfs"+i);
             producer.send(record);
           }
           
