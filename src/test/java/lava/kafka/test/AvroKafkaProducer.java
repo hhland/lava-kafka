@@ -10,7 +10,10 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-import lava.kafka.KafkaProperties;
+
+import lava.kafka.ProducerFactory;
+import lava.kafka.ProducerFactory.Prop;
+
 
 public class AvroKafkaProducer {
 
@@ -27,14 +30,13 @@ public static void main(String[] args) throws Exception {
             stocks[i].setRadeTime(68768);
         }
         
-        Properties props = new Properties();
-        KafkaProperties.bootstrap_servers.put(props, "localhost:9092"); 
-        KafkaProperties.key_serializer.put(props, StringSerializer.class.getName());
-        KafkaProperties.value_serializer.put(props, StockAvroSerializer.class.getName());
         
+        ProducerFactory factory=new ProducerFactory();
+        factory.put(Prop.bootstrap_servers, "localhost:9092");
 
         
-        Producer<String, Stock> producer = new KafkaProducer<>(props);
+        Producer<String, Stock> producer = factory.createProducer(new StringSerializer(),
+        		 new StockAvroSerializer());
         
         for(Stock stock : stocks) {
             ProducerRecord<String, Stock> record = new ProducerRecord<>("dev3-yangyunhe-topic001", stock);
